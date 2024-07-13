@@ -27,7 +27,7 @@ from pathlib import Path
 
 # Download the datasets and put them to the following folders
 root_path = Path("~/ebnerd_data")
-split = "ebnerd_small"
+split = "ebnerd_demo"
 train_path = root_path.joinpath(split, "train")
 dev_path = root_path.joinpath(split, "validation")
 test_path = root_path.joinpath("ebnerd_testset", "test")
@@ -111,6 +111,7 @@ with open(f"./{dataset_version}/news_info.jsonl", "w") as f:
     f.write(news.write_json(row_oriented=True, pretty=True))
 
 print("Preprocess behavior data...")
+
 
 def join_data(data_path):
     history_file = os.path.join(data_path, "history.parquet")
@@ -209,18 +210,19 @@ item_dict = {"key": contrast_emb_df["article_id"].cast(str), "value": contrast_e
 print("Save contrast_emb_dim64.npz...")
 np.savez(f"./{dataset_version}/contrast_emb_dim64.npz", **item_dict)
 
+n_samples = 5_000
 train_df = join_data(train_path.as_posix())
 train_df.columns
 train_df
 print(train_df.head())
 print("Train samples", train_df.shape)
-train_df.write_csv(f"./{dataset_version}/train.csv")
+train_df[:n_samples].write_csv(f"./{dataset_version}/train.csv")
 del train_df
 
 valid_df = join_data(dev_path.as_posix())
 print(valid_df.head())
 print("Validation samples", valid_df.shape)
-valid_df.write_csv(f"./{dataset_version}/valid.csv")
+valid_df[:n_samples].write_csv(f"./{dataset_version}/valid.csv")
 del valid_df
 gc.collect()
 

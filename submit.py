@@ -74,10 +74,11 @@ if __name__ == '__main__':
     logging.info("Feature specs: " + print_to_json(feature_map.features))
     
     model_class = getattr(src, params['model'])
+    breakpoint()
     model = model_class(feature_map, **params)
     model.count_parameters() # print number of parameters used in model
     model.to(device=model.device)
-    model.load_weights(model.checkpoint)
+    # model.load_weights(model.checkpoint)
     
     params["batch_size"] = 16000
     test_gen = RankDataLoader(feature_map, stage='test', **params).make_iterator()
